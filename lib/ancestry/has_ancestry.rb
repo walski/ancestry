@@ -4,7 +4,7 @@ module Ancestry
       # Check options
       raise Ancestry::AncestryException.new("Options for has_ancestry must be in a hash.") unless options.is_a? Hash
       options.each do |key, value|
-        unless [:ancestry_column, :orphan_strategy, :cache_depth, :depth_cache_column, :touch].include? key
+        unless [:ancestry_column, :orphan_strategy, :cache_depth, :depth_cache_column, :touch, :primary_key_format].include? key
           raise Ancestry::AncestryException.new("Unknown option for has_ancestry: #{key.inspect} => #{value.inspect}.")
         end
       end
@@ -21,6 +21,9 @@ module Ancestry
       # Touch ancestors after updating
       cattr_accessor :touch_ancestors
       self.touch_ancestors = options[:touch] || false
+
+      cattr_accessor :primary_key_format
+      self.primary_key_format = options[:primary_key_format] || Ancestry::ANCESTRY_PATTERN
 
       # Include instance methods
       include Ancestry::InstanceMethods
